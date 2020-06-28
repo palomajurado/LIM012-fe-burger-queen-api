@@ -1,17 +1,20 @@
-const express = require('express');
-const config = require('./config');
-const authMiddleware = require('./middleware/auth');
-const errorHandler = require('./middleware/error');
-const routes = require('./routes');
-const pkg = require('./package.json');
+/* eslint-disable linebreak-style */
+/* eslint-disable quotes */
+/* eslint-disable linebreak-style */
+const express = require("express");
+const config = require("./config");
+const authMiddleware = require("./middleware/auth");
+const errorHandler = require("./middleware/error");
+const routes = require("./routes");
+const pkg = require("./package.json");
 
 const { port, dbUrl, secret } = config;
 const app = express();
 
 // TODO: Conección a la BD en mogodb
 
-app.set('config', config);
-app.set('pkg', pkg);
+app.set("config", config);
+app.set("pkg", pkg);
 
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));

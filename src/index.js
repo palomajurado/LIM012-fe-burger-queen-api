@@ -1,17 +1,27 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-console */
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 /* eslint-disable quotes */
 /* eslint-disable linebreak-style */
 const express = require("express");
-const config = require("./config");
+const mongoose = require("mongoose");
+const config = require("./config.js");
 const authMiddleware = require("./middleware/auth");
 const errorHandler = require("./middleware/error");
 const routes = require("./routes");
-const pkg = require("./package.json");
+const pkg = require("../package.json");
 
 const { port, dbUrl, secret } = config;
+mongoose
+  .connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((db) => console.log(db.connection.host))
+  .catch((err) => console.error(err));
+
 const app = express();
 
-// TODO: Conección a la BD en mogodb
+// TODO: Conexión a la BD en mogodb
 
 app.set("config", config);
 app.set("pkg", pkg);

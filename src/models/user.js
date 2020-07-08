@@ -5,4 +5,11 @@ const userSchema = mongoose.Schema({
   roles: { admin: true },
 });
 
-export default mongoose.model('User', userSchema);
+const productSchema = mongoose.Schema({
+  name: String,
+  price: Number,
+  imagen: String,
+  type: String,
+});
+
+export default mongoose.model("Users", productSchema);

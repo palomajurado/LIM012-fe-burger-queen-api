@@ -1,4 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+const userSchema = mongoose.Schema({
+  email: {},
+  roles: { admin: true },
+});
 
 const productSchema = mongoose.Schema({
   name: String,

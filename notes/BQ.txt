@@ -1,0 +1,16 @@
+ssh -i "BQ-LABORATORIA.pem" ubuntu@ec2-52-14-96-39.us-east-2.compute.amazonaws.com
+/* para iniciar con docker*/
+
+docker container ls -> visualizamos si hay alguna instancia corriendo
+docker container ls all -> visualizamos todos los container y no solo los que estan corriendo
+docker container rm [nombre/id] -> remover contenedores detenidos y que se estan utilizando
+docker stop [id/nombre ] -> para detener la instancia que esta corriendo( se puede tener con el nombre o el id)
+
+docker run mongo -> correla la instancia
+  * docker run -p [XXXX1:XXXX2] --name [nombre] mongo (--name [] es opcional)
+    <> XXXX1 : puerto dedde la computadora en la que estoy(27017 por defecto)
+    <> XXXX2 : puerto del contenedor al que me quiero conectar (27017 por defecto)
+    <> nombre : que se le asigna 
+ 
+
+

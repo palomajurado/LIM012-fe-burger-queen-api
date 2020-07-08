@@ -1,4 +1,12 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable quotes */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable linebreak-style */
+/* eslint-disable padded-blocks */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 import Product from "../models/product";
+
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 
 module.exports = (app, nextMain) => {

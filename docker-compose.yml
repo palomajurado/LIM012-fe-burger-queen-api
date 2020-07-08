@@ -5,15 +5,13 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-    networks:
-      - private
   node:
     image: "node:10" # https://hub.docker.com/_/node/
     container_name: api_web
     user: "node"
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=8080
       - DB_URL=mongodb://database/burguer-database
     env_file:
@@ -27,11 +25,3 @@ services:
     command: "bash -c 'rm -rf node_modules && npm install && npm start'" # reinstalamos las dependencias y levantamos el servidor
     depends_on:
       - db
-    networks:
-      - public
-      - private
-networks:
-  public:
-    internal: false
-  private:
-    internal: true

@@ -1,14 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable import/newline-after-import */
-/* eslint-disable linebreak-style */
-/* eslint-disable no-console */
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable linebreak-style */
-/* eslint-disable padded-blocks */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 import Product from "../models/product";
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 
@@ -18,16 +7,31 @@ module.exports = (app, nextMain) => {
     res.json(products);
   });
 
-  app.get("/products/:productId", requireAuth, (req, res, next) => {});
+  app.get("/products/:productId", requireAuth, async (req, res, next) => {
+    const productFound = await Product.findById(req.params.productId);
+    res.json(productFound);
+  });
 
   app.post("/products", requireAdmin, async (req, res, next) => {
     const newProduct = await Product.create(req.body);
     res.json(newProduct);
   });
 
-  app.put("/products/:productId", requireAdmin, (req, res, next) => {});
+  app.put("/products/:productId", requireAdmin, async (req, res, next) => {
+    const productUpdated = await Product.findByIdAndUpdate(
+      req.params.productId,
+      req.body,
+      { new: true }
+    );
+    res.json(productUpdated);
+  });
 
-  app.delete("/products/:productId", requireAdmin, (req, res, next) => {});
+  app.delete("/products/:productId", requireAdmin, async (req, res, next) => {
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
+    res.json(deletedProduct);
+  });
 
   nextMain();
 };

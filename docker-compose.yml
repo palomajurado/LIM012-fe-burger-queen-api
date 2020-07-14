@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
     logging:
-      driver: none 
+      driver: none
   node:
     image: "node:10" # https://hub.docker.com/_/node/
     container_name: api_web
@@ -15,7 +15,8 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=8080
-      - DB_URL=mongodb://database/burguer-database
+      # - DB_URL=mongodb://database/burguer-database
+      - DB_URL=mongodb://ec2-18-216-24-209.us-east-2.compute.amazonaws.com
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:

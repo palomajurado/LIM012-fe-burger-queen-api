@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import Product from '../models/product';
+// const { Product } = require('../models/product');
 
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 

@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.10.1",
+    "@std/esm": "^0.26.0",
+    "babel-node": "0.0.1-security",
     "bcrypt": "5.0.0",
     "body-parser": "1.19.0",
     "express": "4.17.1",
@@ -38,6 +40,7 @@
     "eslint-plugin-import": "^2.18.2",
     "gh-pages": "2.1.1",
     "jest": "24.9.0",
+    "jest-fetch-mock": "^3.0.3",
     "jsdoc": "3.6.3",
     "jsdoc-http-plugin": "0.3.1",
     "node-fetch": "2.6.0",

@@ -1,4 +1,8 @@
+import User from "../models/user";
+
 module.exports = {
-  getUsers: (req, resp, next) => {
+  getUsers: async (req, res, next) => {
+    const users = await User.find();
+    res.json(users);
   },
 };

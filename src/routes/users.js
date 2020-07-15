@@ -5,14 +5,16 @@
 /* eslint-disable padded-blocks */
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
-import User from "../models/user";
+// import User from "../models/user";
 
 const bcrypt = require("bcrypt");
 // const { User } = require('../models/user');
 
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 
-const { getUsers } = require("../controller/users");
+const {
+  getUsers, getOneUser, createUser, updateUser, deleteUser, 
+} = require("../controller/users");
 
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get("config");
@@ -33,27 +35,13 @@ const initAdminUser = (app, next) => {
 module.exports = (app, next) => {
   app.get("/users", requireAdmin, getUsers);
 
-  app.get("/users/:uid", requireAuth, async (req, res) => {
-    const users = await User.findById(req.params.uid);
-    res.json(users);
-  });
+  app.get("/users/:uid", requireAuth, getOneUser);
 
-  app.post("/users", requireAdmin, async (req, res, next) => {
-    const newUser = await User.create(req.body);
-    res.json(newUser);
-  });
+  app.post("/users", requireAdmin, createUser);
 
-  app.put("/users/:uid", requireAuth, async (req, res, next) => {
-    const userUpdate = await User.findByIdAndUpdate(req.params.uid, req.body, {
-      new: true,
-    });
-    res.json(userUpdate);
-  });
+  app.put("/users/:uid", requireAuth, updateUser);
 
-  app.delete("/users/:uid", requireAuth, async (req, res, next) => {
-    const deletedUser = await User.findByIdAndDelete(req.params.uid);
-    res.json(deletedUser);
-  });
+  app.delete("/users/:uid", requireAuth, deleteUser);
 
   initAdminUser(app, next);
 };

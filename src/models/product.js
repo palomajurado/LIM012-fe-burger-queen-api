@@ -9,9 +9,25 @@ const productSchema = mongoose.Schema({
     lowercase: true,
     required: true,
   },
-  price: Number,
-  imagen: String,
-  type: String,
+  price: {
+    type: Number,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: false,
+    default: 'burger1.jpg',
+  },
+  type: {
+    type: String,
+    required: false,
+    default: 'Burgers',
+  },
+  dateEntry: {
+    type: Date,
+    default: Date.now(),
+    required: true,
+  },
 });
 
 export default mongoose.model("Product", productSchema);

@@ -4,7 +4,6 @@ const {
   fetchAsAdmin,
 } = process;
 
-
 describe('POST /products', () => {
   it('should fail with 401 when no auth', () => (
     fetch('/products', { method: 'POST' })

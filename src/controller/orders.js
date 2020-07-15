@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* eslint-disable max-len */
+=======
+>>>>>>> b9187d804052a387f941594f27473afba0d72a41
 import Order from '../models/order';
 import Product from '../models/product';
 

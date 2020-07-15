@@ -28,7 +28,6 @@ const __e2e = {
   // testObjects: [],
 };
 
-
 const fetch = (url, opts = {}) => nodeFetch(`${baseUrl}${url}`, {
   ...opts,
   headers: {
@@ -41,7 +40,6 @@ const fetch = (url, opts = {}) => nodeFetch(`${baseUrl}${url}`, {
       : {}
   ),
 });
-
 
 const fetchWithAuth = (token) => (url, opts = {}) => fetch(url, {
   ...opts,
@@ -84,7 +82,6 @@ const checkAdminCredentials = () => fetch('/auth', {
     return resp.json();
   })
   .then(({ token }) => Object.assign(__e2e, { adminToken: token }));
-
 
 const waitForServerToBeReady = (retries = 10) => new Promise((resolve, reject) => {
   if (!retries) {

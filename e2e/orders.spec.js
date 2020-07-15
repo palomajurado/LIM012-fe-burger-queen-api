@@ -269,7 +269,6 @@ describe('GET /orders/:orderId', () => {
   ));
 });
 
-
 describe('PUT /orders/:orderId', () => {
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'PUT' })
@@ -447,7 +446,6 @@ describe('PUT /orders/:orderId', () => {
       })
   ));
 });
-
 
 describe('DELETE /orders/:orderId', () => {
   it('should fail with 401 when no auth', () => (

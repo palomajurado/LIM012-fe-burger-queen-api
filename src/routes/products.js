@@ -1,38 +1,25 @@
 import Product from "../models/product";
 
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const {
+  getProducts,
+  getOneProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} = require('../controller/products');
+
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 module.exports = (app, nextMain) => {
-  app.get("/products", requireAuth, async (req, res, next) => {
-    const products = await Product.find();
-    res.json(products);
-  });
+  app.get('/products', requireAuth, getProducts);
 
-  app.get("/products/:productId", requireAuth, async (req, res, next) => {
-    const productFound = await Product.findById(req.params.productId);
-    res.json(productFound);
-  });
+  app.get('/products/:productId', requireAuth, getOneProduct);
 
-  app.post("/products", requireAdmin, async (req, res, next) => {
-    const newProduct = await Product.create(req.body);
-    res.json(newProduct);
-  });
+  app.post('/products', requireAdmin, createProduct);
 
-  app.put("/products/:productId", requireAdmin, async (req, res, next) => {
-    const productUpdated = await Product.findByIdAndUpdate(
-      req.params.productId,
-      req.body,
-      { new: true }
-    );
-    res.json(productUpdated);
-  });
+  app.put('/products/:productId', requireAdmin, updateProduct);
 
-  app.delete("/products/:productId", requireAdmin, async (req, res, next) => {
-    const deletedProduct = await Product.findByIdAndDelete(
-      req.params.productId
-    );
-    res.json(deletedProduct);
-  });
+  app.delete('/products/:productId', requireAdmin, deleteProduct);
 
   nextMain();
 };

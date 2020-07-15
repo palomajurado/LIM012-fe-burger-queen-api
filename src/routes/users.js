@@ -1,5 +1,5 @@
-import User from "../models/user";
 
+import User from "../models/user";
 const bcrypt = require("bcrypt");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 const {

@@ -1,10 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-console */
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-/* eslint-disable linebreak-style */
 const express = require("express");
 const mongoose = require("mongoose");
 const config = require("./config.js");
@@ -15,7 +8,11 @@ const pkg = require("../package.json");
 
 const { port, dbUrl, secret } = config;
 mongoose
-  .connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then((db) => console.log(db.connection.host))
   .catch((err) => console.error(err));
 

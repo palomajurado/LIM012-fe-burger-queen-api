@@ -1,5 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
 import { Schema, model } from "mongoose";
 
 const orderSchema = new Schema({

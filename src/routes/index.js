@@ -1,15 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable function-paren-newline */
-/* eslint-disable comma-dangle */
-/* eslint-disable linebreak-style */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable linebreak-style */
-/* eslint-disable padded-blocks */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 const auth = require("./auth");
 const users = require("./users");
 const products = require("./products");
@@ -24,7 +12,6 @@ const root = (app, next) => {
   return next();
 };
 
-// eslint-disable-next-line consistent-return
 const register = (app, routes, cb) => {
   if (!routes.length) {
     return cb();

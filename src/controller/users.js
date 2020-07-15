@@ -2,7 +2,6 @@
 // import 'regenerator-runtime/runtime.js';
 
 import User from '../models/user';
-import user from '../models/user';
 
 module.exports = {
   getUsers: async (req, res) => {
@@ -13,8 +12,9 @@ module.exports = {
       roles: user.roles,
     })));
   },
-  getOneUser: async (req, res) => {
+  getOneUser: async (req, res, next) => {
     const user = await User.findById(req.params.uid);
+    if (!user) next(404);
     res.json({
       _id: user._id,
       email: user.email,

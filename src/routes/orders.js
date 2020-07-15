@@ -37,6 +37,7 @@ module.exports = (app, nextMain) => {
 
   app.delete("/orders/:orderId", requireAuth, async (req, res, next) => {
     const deletedOrder = await Order.findByIdAndDelete(req.params.orderId);
+    console.log(deletedOrder)
     res.json(deletedOrder);
   });
 

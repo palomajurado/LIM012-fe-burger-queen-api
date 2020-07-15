@@ -5,7 +5,7 @@ import { Schema, model } from "mongoose";
 const orderSchema = new Schema({
   userId: String,
   client: String,
-  products: [{ qty: Number, product: { name: String } }],
+  products: [{ _id: false, qty: Number, productId: String }],
   status: String,
   dateEntry: {
     type: Date,

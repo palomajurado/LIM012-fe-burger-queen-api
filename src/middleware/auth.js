@@ -1,17 +1,9 @@
-/* eslint-disable indent */
-/* eslint-disable no-confusing-arrow */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable linebreak-style */
-/* eslint-disable padded-blocks */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 module.exports = (secret) => (req, res, next) => {
   const { authorization } = req.headers;
+  console.log(req.headers);
 
   if (!authorization) {
     return next();
@@ -23,22 +15,25 @@ module.exports = (secret) => (req, res, next) => {
     return next();
   }
 
-  jwt.verify(token, secret, (err, decodedToken) => {
+  jwt.verify(token, secret, async (err, decodedToken) => {
     if (err) {
       return next(403);
     }
-
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
+    const user = await User.findById(decodedToken.id, { password: 0 });
+    if (!user) {
+      return res.status(404).send("NO user found");
+    }
+    res.json(user);
   });
 };
 
 module.exports.isAuthenticated = (req) =>
   // TODO: decidir por la informacion del request si la usuaria esta autenticada
-  true;
 
-module.exports.isAdmin = (req) =>
-  // TODO: decidir por la informacion del request si la usuaria es admin
-  true;
+  (module.exports.isAdmin = (req) =>
+    // TODO: decidir por la informacion del request si la usuaria es admin
+    true);
 
 module.exports.requireAuth = (req, res, next) =>
   !module.exports.isAuthenticated(req) ? next(401) : next();

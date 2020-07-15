@@ -1,26 +1,28 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable linebreak-style */
-/* eslint-disable padded-blocks */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-
+const User = require("../models/user");
 const { secret } = config;
 
 module.exports = (app, nextMain) => {
-  app.post("/auth", (req, resp, next) => {
+  app.post("/auth", async (req, resp, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return next(400);
+      return next(400); // datos mal enviado
     }
 
-    // TODO: autenticar a la usuarix
-    next();
+    const user = await User.findOne({ email });
+    if (!user) return next(404); // no encontrado
+
+    const passwordMatch = await user.comparePassword(password);
+    if (!passwordMatch) return next(401); // no esta autorizado
+
+    const token = jwt.sign({ uid: user._id }, secret); // genera un token
+
+    resp.json(token); // devuelve el token
   });
 
   return nextMain();
 };
+
+// Aqui se autentica al usuario generando un TOKEN

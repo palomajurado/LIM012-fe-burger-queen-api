@@ -3,20 +3,36 @@ import Order from '../models/order';
 import Product from '../models/product';
 
 module.exports = {
+  deleteOrder: async (req, res, next) => {
+    try {
+      const deletedOrder = await Order.findByIdAndDelete(req.params.orderId);
+      res.json(deletedOrder);
+    } catch (err) {
+      next(404);
+    }
+  },
   getOrders: async (req, res) => {
     const orders = await Order.find();
     res.json(orders);
   },
-  getOneOrder: async (req, res) => {
-    const orderFound = await Order.findById(req.params.orderId);
-    res.json(orderFound);
+  getOneOrder: async (req, res, next) => {
+    try {
+      const orderFound = await Order.findById(req.params.orderId);
+      if (!orderFound) next(404);
+      res.json(orderFound);
+    } catch (error) {
+      next(404);
+    }
   },
   createOrder: async (req, res, next) => {
+    if (req.body.products.length === 0 || !req.body.userId) {
+      next(400);
+    }
     const productsArray = await Product.find({ _id: { $in: req.body.products.map((p) => p.productId) } });
 
     req.body.products = req.body.products.map((item, key) => ({
+      productId: item.productId,
       product: {
-        _id: item.productId,
         name: productsArray[key].name,
         price: productsArray[key].price,
       },
@@ -28,15 +44,37 @@ module.exports = {
     res.json(newOrder);
   },
   updateOrder: async (req, res, next) => {
-    const orderUpdated = await Order.findByIdAndUpdate(
-      req.params.orderId,
-      req.body,
-      { new: true },
-    );
-    res.json(orderUpdated);
-  },
-  deleteOrder: async (req, res, next) => {
-    const deletedOrder = await Order.findByIdAndDelete(req.params.orderId);
-    res.json(deletedOrder);
+    try {
+      const states = ['pending', 'canceled', 'delivering', 'delivered'];
+      const currOrder = await Order.findById(req.params.orderId);
+      // if (!currOrder) next(404);
+      if (Object.keys(req.body).length === 0) next(400);
+      if (req.body.products) {
+        const productsArray = await Product.find({ _id: { $in: req.body.products.map((p) => p.productId) } });
+        req.body.products = req.body.products.map((item, key) => ({
+          productId: item.productId,
+          product: {
+            name: productsArray[key].name,
+            price: productsArray[key].price,
+          },
+          qty: item.qty,
+        }));
+        // console.log('hay productos');
+      }
+      if (req.body.status !== undefined && !states.includes(req.body.status)) {
+        next(400);
+      } else {
+        if (req.body.status === 'delivered') req.body.dateProcessed = Date.now();
+        // console.log(req.body);
+        const orderUpdated = await Order.findByIdAndUpdate(
+          req.params.orderId,
+          req.body,
+          { new: true },
+        );
+        res.json(orderUpdated);
+      }
+    } catch (error) {
+      next(404);
+    }
   },
 };

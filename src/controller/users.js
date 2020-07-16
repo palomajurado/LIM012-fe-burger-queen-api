@@ -1,9 +1,18 @@
-/* eslint-disable no-unused-vars */
-// import 'regenerator-runtime/runtime.js';
-
 import User from '../models/user';
 
 module.exports = {
+  deleteUser: async (req, res, next) => {
+    try {
+      const deletedUser = await User.findByIdAndDelete(req.params.uid);
+      res.json({
+        _id: deletedUser._id,
+        email: deletedUser.email,
+        roles: deletedUser.roles,
+      });
+    } catch (error) {
+      next(404);
+    }
+  },
   getUsers: async (req, res) => {
     const users = await User.find();
     res.json(users.map((user) => ({
@@ -22,6 +31,9 @@ module.exports = {
     });
   },
   createUser: async (req, res, next) => {
+    if (!req.body.email || !req.body.password) next(400);
+    const existingUse = await User.findOne({ email: req.body.email });
+    if (existingUse) next(403);
     const newUser = await User.create(req.body);
     res.json({
       _id: newUser._id,
@@ -30,17 +42,11 @@ module.exports = {
     });
   },
   updateUser: async (req, res, next) => {
+    if (!req.body.email || !req.body.password) next(400);
+
     const userUpdate = await User.findByIdAndUpdate(req.params.uid, req.body, {
       new: true,
     });
     res.json(userUpdate);
-  },
-  deleteUser: async (req, res, next) => {
-    const deletedUser = await User.findByIdAndDelete(req.params.uid);
-    res.json({
-      _id: deletedUser._id,
-      email: deletedUser.email,
-      roles: deletedUser.roles,
-    });
   },
 };

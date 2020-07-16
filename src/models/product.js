@@ -1,6 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const productSchema = mongoose.Schema({
   name: {
@@ -30,4 +28,4 @@ const productSchema = mongoose.Schema({
   },
 });
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model('Product', productSchema);

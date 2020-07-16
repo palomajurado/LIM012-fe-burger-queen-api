@@ -1,6 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable quotes */
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const orderSchema = new Schema({
   userId: {
@@ -20,13 +18,12 @@ const orderSchema = new Schema({
   },
   dateEntry: {
     type: Date,
-    default: Date.now(),
     required: true,
+    default: Date.now(),
   },
   dateProcessed: {
     type: Date,
-    required: true,
   },
 });
 
-export default model("Order", orderSchema);
+export default model('Order', orderSchema);

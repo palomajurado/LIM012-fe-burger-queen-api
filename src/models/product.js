@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const productSchema = mongoose.Schema(
   {
@@ -31,4 +31,4 @@ const productSchema = mongoose.Schema(
   { versionKey: false }
 );
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model('Product', productSchema);

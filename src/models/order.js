@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Schema, model } from 'mongoose';
-=======
-import { Schema, model } from "mongoose";
->>>>>>> 8e57b8edaf3522ee4e8fbfd2114b0e0f8aaf63f4
 
 const orderSchema = new Schema({
   userId: {
@@ -13,12 +9,16 @@ const orderSchema = new Schema({
     type: String,
     required: true,
   },
-  products: [{
-    _id: false, qty: Number, productId: String, product: Object,
-  }],
+  products: [
+    {
+      _id: false,
+      qty: Number,
+      productId: { type: String, ref: "Product" },
+    },
+  ],
   status: {
     type: String,
-    default: 'pending',
+    default: "pending",
   },
   dateEntry: {
     type: Date,
@@ -27,6 +27,7 @@ const orderSchema = new Schema({
   },
   dateProcessed: {
     type: Date,
+    required: false,
   },
 });
 

@@ -1,6 +1,6 @@
-/* eslint-disable max-len */
-import Order from '../models/order';
-import Product from '../models/product';
+
+import Order from "../models/order";
+import Product from "../models/product";
 
 module.exports = {
   deleteOrder: async (req, res, next) => {
@@ -12,7 +12,7 @@ module.exports = {
     }
   },
   getOrders: async (req, res) => {
-    const orders = await Order.find();
+    const orders = await Order.find().populate("products.productId");
     res.json(orders);
   },
   getOneOrder: async (req, res, next) => {
@@ -25,20 +25,6 @@ module.exports = {
     }
   },
   createOrder: async (req, res, next) => {
-    if (req.body.products.length === 0 || !req.body.userId) {
-      next(400);
-    }
-    const productsArray = await Product.find({ _id: { $in: req.body.products.map((p) => p.productId) } });
-
-    req.body.products = req.body.products.map((item, key) => ({
-      productId: item.productId,
-      product: {
-        name: productsArray[key].name,
-        price: productsArray[key].price,
-      },
-      qty: item.qty,
-    }));
-
     const newOrder = new Order(req.body);
     await newOrder.save();
     res.json(newOrder);
@@ -76,5 +62,15 @@ module.exports = {
     } catch (error) {
       next(404);
     }
+    const orderUpdated = await Order.findByIdAndUpdate(
+      req.params.orderId,
+      req.body,
+      { new: true }
+    );
+    res.json(orderUpdated);
+  },
+  deleteOrder: async (req, res, next) => {
+    const deletedOrder = await Order.findByIdAndDelete(req.params.orderId);
+    res.json({ order: deletedOrder });
   },
 };

@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import Product from '../models/product';
+import Product from "../models/product";
 
 const {
   getProducts,

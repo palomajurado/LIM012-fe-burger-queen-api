@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Schema, model } from 'mongoose';
+=======
+import { Schema, model } from "mongoose";
+>>>>>>> 8e57b8edaf3522ee4e8fbfd2114b0e0f8aaf63f4
 
 const orderSchema = new Schema({
   userId: {

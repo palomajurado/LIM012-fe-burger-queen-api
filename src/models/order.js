@@ -9,12 +9,16 @@ const orderSchema = new Schema({
     type: String,
     required: true,
   },
-  products: [{
-    _id: false, qty: Number, productId: String, product: Object,
-  }],
+  products: [
+    {
+      _id: false,
+      qty: Number,
+      productId: { type: String, ref: "Product" },
+    },
+  ],
   status: {
     type: String,
-    default: 'pending',
+    default: "pending",
   },
   dateEntry: {
     type: Date,
@@ -23,7 +27,7 @@ const orderSchema = new Schema({
   },
   dateProcessed: {
     type: Date,
-    required: true,
+    required: false,
   },
 });
 

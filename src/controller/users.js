@@ -1,17 +1,15 @@
-/* eslint-disable no-unused-vars */
-// import 'regenerator-runtime/runtime.js';
-
-import User from '../models/user';
-import user from '../models/user';
+import User from "../models/user";
 
 module.exports = {
   getUsers: async (req, res) => {
     const users = await User.find();
-    res.json(users.map((user) => ({
-      _id: user._id,
-      email: user.email,
-      roles: user.roles,
-    })));
+    res.json(
+      users.map((user) => ({
+        _id: user._id,
+        email: user.email,
+        roles: user.roles,
+      }))
+    );
   },
   getOneUser: async (req, res) => {
     const user = await User.findById(req.params.uid);

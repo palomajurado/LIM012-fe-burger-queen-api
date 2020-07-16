@@ -1,4 +1,4 @@
-import Product from '../models/product';
+import Product from "../models/product";
 
 module.exports = {
   getProducts: async (req, res) => {
@@ -17,14 +17,14 @@ module.exports = {
     const productUpdated = await Product.findByIdAndUpdate(
       req.params.productId,
       req.body,
-      { new: true },
+      { new: true }
     );
     res.json(productUpdated);
   },
   deleteProduct: async (req, res, next) => {
     const deletedProduct = await Product.findByIdAndDelete(
-      req.params.productId,
+      req.params.productId
     );
-    res.json(deletedProduct);
+    res.json({ product: deletedProduct });
   },
 };

@@ -1,4 +1,3 @@
-
 import User from "../models/user";
 const bcrypt = require("bcrypt");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
@@ -21,9 +20,12 @@ const initAdminUser = async (app, next) => {
     roles: { admin: true },
   };
 
-  const newAdminUser = new User(adminUser);
-  await newAdminUser.save();
-  // TODO: crear usuaria admin
+  const user = await User.findOne({ email: adminEmail });
+  if (!user) {
+    // TODO: crear usuaria admin
+    const newAdminUser = new User(adminUser);
+    await newAdminUser.save();
+  }
   next();
 };
 

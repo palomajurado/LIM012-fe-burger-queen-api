@@ -33,7 +33,6 @@ routes(app, (err) => {
   if (err) {
     throw err;
   }
-
   app.use(errorHandler);
 
   app.listen(port, () => {

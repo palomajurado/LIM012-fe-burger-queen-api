@@ -1,6 +1,5 @@
-
-import Order from "../models/order";
-import Product from "../models/product";
+import Order from '../models/order.model';
+import Product from '../models/product.model';
 
 module.exports = {
   deleteOrder: async (req, res, next) => {
@@ -12,7 +11,7 @@ module.exports = {
     }
   },
   getOrders: async (req, res) => {
-    const orders = await Order.find().populate("products.productId");
+    const orders = await Order.find().populate('products.productId');
     res.json(orders);
   },
   getOneOrder: async (req, res, next) => {
@@ -65,12 +64,8 @@ module.exports = {
     const orderUpdated = await Order.findByIdAndUpdate(
       req.params.orderId,
       req.body,
-      { new: true }
+      { new: true },
     );
     res.json(orderUpdated);
-  },
-  deleteOrder: async (req, res, next) => {
-    const deletedOrder = await Order.findByIdAndDelete(req.params.orderId);
-    res.json({ order: deletedOrder });
   },
 };

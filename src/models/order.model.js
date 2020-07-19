@@ -13,12 +13,12 @@ const orderSchema = new Schema({
     {
       _id: false,
       qty: Number,
-      productId: { type: String, ref: "Product" },
+      productId: { type: String, ref: 'Product' },
     },
   ],
   status: {
     type: String,
-    default: "pending",
+    default: 'pending',
   },
   dateEntry: {
     type: Date,

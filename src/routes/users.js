@@ -1,16 +1,17 @@
-import User from "../models/user";
-const bcrypt = require("bcrypt");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+import User from '../models/user.model';
+
+const bcrypt = require('bcrypt');
+const { requireAuth, requireAdmin, requireAdminOrUser } = require('../middleware/auth');
 const {
   getUsers,
   getOneUser,
   createUser,
   updateUser,
   deleteUser,
-} = require("../controller/users");
+} = require('../controller/users.controller');
 
 const initAdminUser = async (app, next) => {
-  const { adminEmail, adminPassword } = app.get("config");
+  const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
     return next();
   }
@@ -30,15 +31,15 @@ const initAdminUser = async (app, next) => {
 };
 
 module.exports = (app, next) => {
-  app.get("/users", requireAdmin, getUsers);
+  app.delete('/users/:uid', requireAdminOrUser, deleteUser);
 
-  app.get("/users/:uid", requireAuth, getOneUser);
+  app.get('/users', requireAdmin, getUsers);
 
-  app.post("/users", requireAdmin, createUser);
+  app.get('/users/:uid', requireAdminOrUser, getOneUser);
 
-  app.put("/users/:uid", requireAuth, updateUser);
+  app.post('/users', requireAdmin, createUser);
 
-  app.delete("/users/:uid", requireAuth, deleteUser);
+  app.put('/users/:uid', requireAdminOrUser, updateUser);
 
   initAdminUser(app, next);
 };

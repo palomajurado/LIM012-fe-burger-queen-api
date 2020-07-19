@@ -8,7 +8,7 @@ module.exports = (app, nextMain) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return next(400); // datos mal enviado
+      return next(400); // datos mal enviados o no envio alguno
     }
 
     const user = await User.findOne({ email });
@@ -19,7 +19,7 @@ module.exports = (app, nextMain) => {
 
     const token = jwt.sign({ uid: user._id }, secret); // genera un token
 
-    resp.json(token); // devuelve el token
+    resp.json({ resp: { token } }); // devuelve el token
   });
 
   return nextMain();

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const productSchema = mongoose.Schema(
   {
@@ -30,5 +31,5 @@ const productSchema = mongoose.Schema(
   },
   { versionKey: false }
 );
-
+productSchema.plugin(mongoosePaginate);
 export default mongoose.model("Product", productSchema);

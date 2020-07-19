@@ -18,7 +18,6 @@ module.exports = (secret) => (req, res, next) => {
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
     const user = await User.findById(decodedToken.uid, { password: 0 });
     if (!user) return res.status(404).send("No user found");
-
     req.user = user;
     next();
   });

@@ -11,6 +11,6 @@ module.exports.getPagination = (url, page, limit, totalPages) => {
 };
 
 module.exports.uidOrEmail = (parram) => {
-  if (parram.indexOf("@") >= 0) return { email: parram };
+  if (parram.indexOf('@') >= 0) return { email: parram };
   return { _id: parram };
 };

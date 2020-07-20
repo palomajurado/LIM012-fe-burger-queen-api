@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
-import jwt from 'jsonwebtoken';
-import User from '../models/user.model';
-import config from '../config';
+const jwt = require('jsonwebtoken');
+const User = require('../models/user.model');
+const config = require('../config');
 
-module.exports = (secret) => (req, res, next) => {
+module.exports = () => (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) return next();

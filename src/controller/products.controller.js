@@ -1,5 +1,5 @@
-import Product from '../models/product.model';
-import { getPagination } from '../utils/utils';
+const Product = require('../models/product.model');
+const { getPagination } = require('../utils/utils');
 
 module.exports = {
   getProducts: async (req, res, next) => {

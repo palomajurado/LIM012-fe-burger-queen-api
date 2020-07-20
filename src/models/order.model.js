@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -37,4 +37,4 @@ const orderSchema = new Schema(
 );
 
 orderSchema.plugin(mongoosePaginate);
-export default model('Order', orderSchema);
+module.exports = model('Order', orderSchema);

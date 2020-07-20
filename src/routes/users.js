@@ -1,10 +1,7 @@
-import User from '../models/user.model';
-
 const bcrypt = require('bcrypt');
-const {
-  requireAdmin,
-  requireAdminOrUser,
-} = require('../middleware/auth');
+const User = require('../models/user.model');
+
+const { requireAdmin, requireAdminOrUser } = require('../middleware/auth');
 const {
   getUsers,
   getOneUser,

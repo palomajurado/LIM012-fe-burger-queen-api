@@ -1,8 +1,6 @@
-import User from '../models/user.model';
-import { uidOrEmail } from '../utils/utils';
-import { isAdmin } from '../middleware/auth';
-
 const bcrypt = require('bcrypt');
+const User = require('../models/user.model');
+const { uidOrEmail } = require('../utils/utils');
 
 module.exports = {
   getUsers: async (req, res) => {
@@ -39,14 +37,13 @@ module.exports = {
         roles: newUser.roles,
       });
     } catch (err) {
-      console.error(err);
       next(403);
     }
   },
   updateUser: async (req, res, next) => {
     try {
       if (!req.body.email || !req.body.password) next(400);
-      if (req.body.roles && !isAdmin(req)) next(403);
+      if (req.body.roles) next(403);
       const obj = uidOrEmail(req.params.uid);
       const user = req.body;
       user.password = bcrypt.hashSync(user.password, 10);

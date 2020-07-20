@@ -1,6 +1,5 @@
-import Order from "../models/order";
+import Order from "../models/order.model";
 import { getPagination } from "../utils/utils";
-import product from "../models/product";
 
 module.exports = {
   getOrders: async (req, res) => {

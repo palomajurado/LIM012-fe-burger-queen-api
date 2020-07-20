@@ -1,13 +1,17 @@
-import User from "../models/user";
+import User from "../models/user.model";
 const bcrypt = require("bcrypt");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const {
+  requireAuth,
+  requireAdmin,
+  requireAdminOrUser,
+} = require("../middleware/auth");
 const {
   getUsers,
   getOneUser,
   createUser,
   updateUser,
   deleteUser,
-} = require("../controller/users");
+} = require("../controller/users.controller");
 
 const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get("config");
@@ -30,15 +34,15 @@ const initAdminUser = async (app, next) => {
 };
 
 module.exports = (app, next) => {
+  app.delete("/users/:uid", requireAdminOrUser, deleteUser);
+
   app.get("/users", requireAdmin, getUsers);
 
-  app.get("/users/:uid", requireAuth, getOneUser);
+  app.get("/users/:uid", requireAdminOrUser, getOneUser);
 
   app.post("/users", requireAdmin, createUser);
 
-  app.put("/users/:uid", requireAuth, updateUser);
-
-  app.delete("/users/:uid", requireAuth, deleteUser);
+  app.put("/users/:uid", requireAdminOrUser, updateUser);
 
   initAdminUser(app, next);
 };

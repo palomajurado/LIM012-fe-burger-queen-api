@@ -1,14 +1,11 @@
-import Order from "../models/order";
-import Products from "../models/product";
-const mongodb = require('mongodb');
 const { requireAuth } = require("../middleware/auth");
-const { 
+const {
   getOrders,
   getOneOrder,
   createOrder,
   updateOrder,
   deleteOrder,
-} = require('../controller/orders');
+} = require("../controller/orders.controller");
 
 module.exports = (app, nextMain) => {
   app.get("/orders", requireAuth, getOrders);

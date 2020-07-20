@@ -1,14 +1,17 @@
-import mongoose from "mongoose";
-const mongoosePaginate = require("mongoose-paginate-v2");
-import bcrypt from "bcryptjs";
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const userSchema = mongoose.Schema(
   {
-    email: { type: String, require: true, unique: true, lowercase: true },
+    email: {
+      type: String, require: true, unique: true, lowercase: true,
+    },
     password: { type: String, require: true },
     roles: { admin: { type: Boolean, default: false } },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 userSchema.methods.encryptPassword = async (password) => {
@@ -28,4 +31,4 @@ userSchema.methods.comparePassword = async function (password) {
   }
 };
 userSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

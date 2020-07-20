@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-const mongoosePaginate = require("mongoose-paginate-v2");
+import mongoose from 'mongoose';
+
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const productSchema = mongoose.Schema(
   {
@@ -16,12 +17,12 @@ const productSchema = mongoose.Schema(
     image: {
       type: String,
       required: false,
-      default: "burger1.jpg",
+      default: 'burger1.jpg',
     },
     type: {
       type: String,
       required: false,
-      default: "Burgers",
+      default: 'Burgers',
     },
     dateEntry: {
       type: Date,
@@ -29,9 +30,9 @@ const productSchema = mongoose.Schema(
       required: true,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 productSchema.plugin(mongoosePaginate);
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model('Product', productSchema);

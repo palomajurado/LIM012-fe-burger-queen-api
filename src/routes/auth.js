@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
-const config = require("../config");
-const User = require("../models/user.model");
+const jwt = require('jsonwebtoken');
+const config = require('../config');
+const User = require('../models/user.model');
 
 const { secret } = config;
 
 module.exports = (app, nextMain) => {
-  app.post("/auth", async (req, resp, next) => {
+  app.post('/auth', async (req, resp, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {

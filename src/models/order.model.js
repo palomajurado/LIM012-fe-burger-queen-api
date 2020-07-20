@@ -1,5 +1,6 @@
-import { Schema, model } from "mongoose";
-const mongoosePaginate = require("mongoose-paginate-v2");
+import { Schema, model } from 'mongoose';
+
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const orderSchema = new Schema(
   {
@@ -15,12 +16,12 @@ const orderSchema = new Schema(
       {
         _id: false,
         qty: Number,
-        product: { type: String, ref: "Product" },
+        product: { type: String, ref: 'Product' },
       },
     ],
     status: {
       type: String,
-      default: "pending",
+      default: 'pending',
     },
     dateEntry: {
       type: Date,
@@ -32,8 +33,8 @@ const orderSchema = new Schema(
       required: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 orderSchema.plugin(mongoosePaginate);
-export default model("Order", orderSchema);
+export default model('Order', orderSchema);

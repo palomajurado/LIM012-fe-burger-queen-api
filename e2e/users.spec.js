@@ -10,7 +10,6 @@ const {
   fetchWithAuth,
 } = process;
 
-
 const parseLinkHeader = (str) => str.split(',')
   .reduce((memo, item) => {
     const [, value, key] = /^<(.*)>;\s+rel="(first|last|prev|next)"/.exec(item.trim());

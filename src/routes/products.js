@@ -4,7 +4,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-} from "../controller/products";
+} from "../controller/products.controller";
 
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 

@@ -9,3 +9,8 @@ module.exports.getPagination = (url, page, limit, totalPages) => {
   // console.log('lastPage', lastPage);
   return `${firstPage}, ${prevPage}, ${nextPage}, ${lastPage}`;
 };
+
+module.exports.uidOrEmail = (parram) => {
+  if (parram.indexOf("@") >= 0) return { email: parram };
+  return { _id: parram };
+};

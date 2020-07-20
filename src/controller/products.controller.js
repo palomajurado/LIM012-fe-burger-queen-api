@@ -1,56 +1,55 @@
-import Product from '../models/product.model';
-// import { uidOrEmail } from './utils';
+import Product from "../models/product.model";
+import { getPagination } from "../utils/utils";
 
 module.exports = {
-  deleteProduct: async (req, res, next) => {
-    try {
-      // const obj = uidOrEmail(req.params.uid);
-      const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
-      res.json(deletedProduct);
-    } catch (err) {
-      next(404);
-    }
-  },
   getProducts: async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
-  },
-  getOneProduct: async (req, res, next) => {
-    try {
-      const productFound = await Product.findById(req.params.productId);
-      res.json(productFound);
-    } catch (err) {
-      next(404);
+    const url = `${req.protocol}://${req.get("host")}${req.path}`;
+    const options = {
+      limit: parseInt(req.query.limit) || 10,
+      page: parseInt(req.query.page) || 1,
+    };
+    const responsePaginated = await Product.paginate({}, options);
+
+    res.set(
+      "link",
+      getPagination(
+        url,
+        options.page,
+        options.limit,
+        responsePaginated.totalPages
+      )
+    );
+    if (!responsePaginated) {
+      next(401);
     }
+    res.json({ products: responsePaginated.docs });
+  },
+  getOneProduct: async (req, res) => {
+    const productFound = await Product.findById(req.params.productId);
+    if (!productFound) {
+      return next(404);
+    }
+    res.json({ product: productFound });
   },
   createProduct: async (req, res, next) => {
-    try {
-      if (!req.body.name || !req.body.price) next(400);
-      const newProduct = await Product.create(req.body);
-      res.json(newProduct);
-    } catch (error) {
-      next(404);
-    }
+    const newProduct = await Product.create(req.body);
+    res.json({ product: newProduct });
   },
   updateProduct: async (req, res, next) => {
-    try {
-      if (Object.keys(req.body).length === 0) {
-        next(404);
-      }
-      const productUpdated = await Product.findByIdAndUpdate(
-        req.params.productId,
-        req.body,
-        { new: true },
-      );
-      res.json(productUpdated);
-    } catch (error) {
-      next(404);
-    }
     const productUpdated = await Product.findByIdAndUpdate(
       req.params.productId,
       req.body,
-      { new: true },
+      { new: true }
     );
-    res.json(productUpdated);
+    res.json({ product: productUpdated });
+  },
+  deleteProduct: async (req, res, next) => {
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
+    if (!deletedProduct) {
+      next(404);
+    }
+    res.json({ product: deletedProduct });
   },
 };

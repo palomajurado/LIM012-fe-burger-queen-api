@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const config = require('./config.js');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
@@ -24,6 +25,7 @@ app.set('config', config);
 app.set('pkg', pkg);
 
 // parse application/x-www-form-urlencoded
+app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(authMiddleware(secret));

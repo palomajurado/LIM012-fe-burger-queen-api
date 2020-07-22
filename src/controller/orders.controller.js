@@ -9,6 +9,7 @@ module.exports = {
       limit: parseInt(req.query.limit, 10) || 10,
       page: parseInt(req.query.page, 10) || 1,
     };
+
     const responsePaginated = await Order.paginate({}, options);
     res.set(
       'link',
@@ -19,6 +20,9 @@ module.exports = {
         responsePaginated.totalPages,
       ),
     );
+    if (!responsePaginated) {
+      next(401);
+    }
     res.json({ orders: responsePaginated.docs });
   },
   getOneOrder: async (req, res) => {

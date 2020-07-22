@@ -1,16 +1,16 @@
-version: "3"
+version: '3'
 services:
   db:
     container_name: database
     image: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
     logging:
       driver: none
   node:
-    image: "node:10" # https://hub.docker.com/_/node/
+    image: 'node:10' # https://hub.docker.com/_/node/
     container_name: api_web
-    user: "node"
+    user: 'node'
     working_dir: /home/node/app
     environment:
       - NODE_ENV=development
@@ -22,9 +22,9 @@ services:
     volumes:
       - .:/home/node/app # montamos el codigo en el HOME del usuario _node_
     expose:
-      - "8080" # nuestra app corre en el puerto 8080
+      - '8080' # nuestra app corre en el puerto 8080
     ports:
-      - "3000:8080" # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
+      - '3000:8080' # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
     command: "bash -c 'rm -rf node_modules && npm install && npm run dev'" # reinstalamos las dependencias y levantamos el servidor
     depends_on:
       - db

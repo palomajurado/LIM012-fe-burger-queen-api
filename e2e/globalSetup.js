@@ -52,7 +52,12 @@ const fetchWithAuth = (token) => (url, opts = {}) =>
     },
   });
 
-const fetchAsAdmin = (url, opts) => fetchWithAuth(__e2e.adminToken)(url, opts);
+const fetchAsAdmin = (url, opts) => {
+  console.log(__e2e.adminToken);
+
+  return fetchWithAuth(__e2e.adminToken)(url, opts);
+};
+
 const fetchAsTestUser = (url, opts) =>
   fetchWithAuth(__e2e.testUserToken)(url, opts);
 
@@ -62,8 +67,11 @@ const createTestUser = () =>
     body: __e2e.testUserCredentials,
   })
     .then((resp) => {
+      console.log(__e2e.testUserCredentials);
+      resp.json().then((result) => console.log(result));
+
       if (resp.status !== 200) {
-        throw new Error('Could not create test user');
+        throw new Error('Could not create test userblablabala 1234');
       }
       return fetch('/auth', {
         method: 'POST',

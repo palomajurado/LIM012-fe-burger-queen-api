@@ -9,7 +9,6 @@ module.exports = {
       page: parseInt(req.query.page, 10) || 1,
     };
     const responsePaginated = await Product.paginate({}, options);
-
     res.set(
       'link',
       getPagination(
@@ -20,7 +19,7 @@ module.exports = {
       ),
     );
     if (!responsePaginated) {
-      next(401);
+      next(404);
     }
     res.json({ products: responsePaginated.docs });
   },

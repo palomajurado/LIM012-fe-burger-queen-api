@@ -10,6 +10,7 @@ const {
   deleteUser,
 } = require('../controller/users.controller');
 
+// verifica si el user admin esta creado
 const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {

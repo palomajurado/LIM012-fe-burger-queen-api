@@ -2,7 +2,7 @@ const Order = require('../models/order.model');
 const { getPagination } = require('../utils/utils');
 
 module.exports = {
-  getOrders: async (req, res) => {
+  getOrders: async (req, res, next) => {
     const url = `${req.protocol}://${req.get('host')}${req.path}`;
     const options = {
       populate: 'products.product',

@@ -2,11 +2,16 @@ const path = require('path');
 const { spawn } = require('child_process');
 const nodeFetch = require('node-fetch');
 const kill = require('tree-kill');
-
+const { MongoMemoryServer } = require('mongodb-memory-server');
+// const mongoose = require('mongoose');
+// const dbHandler = require('./db-handler');
+// const setup = require('@shelf/jest-mongodb/setup');
+// const MongodbMemoryServer = require('mongodb-memory-server').default;
 const config = require('../src/config');
-
 const port = process.env.PORT || 8888;
 const baseUrl = process.env.REMOTE_URL || `http://127.0.0.1:${port}`;
+
+// global.__MONGOD__ = MongodbMemoryServer;
 
 const __e2e = {
   port,
@@ -15,16 +20,13 @@ const __e2e = {
     email: config.adminEmail,
     password: config.adminPassword,
   },
-  adminToken:
-    'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjE1Y2FmMzlhNTAzNjAwNjQ3MzFlNjkiLCJpYXQiOjE1OTUyNjUwMjV9.k58VoCOGR0sygYZg4rzmAkKgswocS3V20iX3F5o26i0',
+  adminToken:null,
   testUserCredentials: {
-    email: 'root@gmail.com',
-    password: 'root',
+    email: 'test@test.test',
+    password: '123456',
   },
-  testUserToken:
-    'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjE1Y2FmMzlhNTAzNjAwNjQ3MzFlNjkiLCJpYXQiOjE1OTUyNjUwMjV9.k58VoCOGR0sygYZg4rzmAkKgswocS3V20iX3F5o26i0',
-  childProcessPid:
-    'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjE1Y2FmMzlhNTAzNjAwNjQ3MzFlNjkiLCJpYXQiOjE1OTUyNjUwMjV9.k58VoCOGR0sygYZg4rzmAkKgswocS3V20iX3F5o26i0',
+  testUserToken:null,
+  childProcessPid:null,
   // in `testObjects` we keep track of objects created during the test run so
   // that we can clean up before exiting.
   // For example: ['users/foo@bar.baz', 'products/xxx', 'orders/yyy']
@@ -71,7 +73,7 @@ const createTestUser = () =>
       resp.json().then((result) => console.log(result));
 
       if (resp.status !== 200) {
-        throw new Error('Could not create test userblablabala 1234');
+        throw new Error('Could not create test user');
       }
       return fetch('/auth', {
         method: 'POST',
@@ -125,6 +127,12 @@ module.exports = () =>
     }
 
     // TODO: Configurar DB de tests
+    const mongod = new MongoMemoryServer();
+
+    mongod.getConnectionString().then((mongoUrl) => {
+    process.env.DB_URL = mongoUrl;
+    console.log('Mongo url is ', process.env.DB_URL);
+    console.info('\nIn-memory mongo server ', mongoUrl);
 
     console.info('Staring local server...');
     const child = spawn('npm', ['start', process.env.PORT || 8888], {
@@ -134,9 +142,9 @@ module.exports = () =>
 
     Object.assign(__e2e, { childProcessPid: child.pid });
 
-    child.stdout.on('data', (chunk) => {
-      console.info(`\x1b[34m${chunk.toString()}\x1b[0m`);
-    });
+    // child.stdout.on('data', (chunk) => {
+    //   console.info(`\x1b[34m${chunk.toString()}\x1b[0m`);
+    // });
 
     child.stderr.on('data', (chunk) => {
       const str = chunk.toString();
@@ -159,6 +167,7 @@ module.exports = () =>
       .catch((err) => {
         kill(child.pid, 'SIGKILL', () => reject(err));
       });
+    });
   });
 
 // Export globals - ugly... :-(

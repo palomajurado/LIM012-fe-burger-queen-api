@@ -1,5 +1,5 @@
-/* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const config = require('../config');

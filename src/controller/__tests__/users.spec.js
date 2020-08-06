@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+<<<<<<< HEAD
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
@@ -118,3 +119,13 @@ describe('GET/ users', () => {
 });
 
 // estos tenemos que desarrollarlos nosotras
+=======
+/* eslint-disable max-len */
+const {
+  createUser,
+  getOneUser,
+  getUsers,
+  deleteUser,
+  updateUser,
+} = require('../users.controller');
+>>>>>>> a190edc24dd261f987c07f4b66d61e7abe48500a

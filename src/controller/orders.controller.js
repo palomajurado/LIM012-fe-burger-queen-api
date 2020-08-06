@@ -9,7 +9,6 @@ module.exports = {
       limit: parseInt(req.query.limit, 10) || 10,
       page: parseInt(req.query.page, 10) || 1,
     };
-
     const responsePaginated = await Order.paginate({}, options);
     res.set(
       'link',
@@ -46,6 +45,7 @@ module.exports = {
     res.json({ order: populatedOrder });
   },
   updateOrder: async (req, res) => {
+    // CHEQUEAR RESTRICCIONES EN ESTA LINEA
     const orderUpdated = await Order.findByIdAndUpdate(
       req.params.orderId,
       req.body,

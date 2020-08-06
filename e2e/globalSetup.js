@@ -3,15 +3,11 @@ const { spawn } = require('child_process');
 const nodeFetch = require('node-fetch');
 const kill = require('tree-kill');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-// const mongoose = require('mongoose');
-// const dbHandler = require('./db-handler');
-// const setup = require('@shelf/jest-mongodb/setup');
-// const MongodbMemoryServer = require('mongodb-memory-server').default;
 const config = require('../src/config');
 const port = process.env.PORT || 8888;
 const baseUrl = process.env.REMOTE_URL || `http://127.0.0.1:${port}`;
 
-// global.__MONGOD__ = MongodbMemoryServer;
+// global.__mongoServer__ = mongoServerbMemoryServer;
 
 const __e2e = {
   port,
@@ -127,47 +123,47 @@ module.exports = () =>
     }
 
     // TODO: Configurar DB de tests
-    const mongod = new MongoMemoryServer();
+    const mongoServer = new MongoMemoryServer();
 
-    mongod.getConnectionString().then((mongoUrl) => {
-    process.env.DB_URL = mongoUrl;
-    console.log('Mongo url is ', process.env.DB_URL);
-    console.info('\nIn-memory mongo server ', mongoUrl);
+    mongoServer.getConnectionString().then((mongoUrl) => {
+      process.env.DB_URL = mongoUrl;
+      console.log('Mongo url is ', process.env.DB_URL);
+      console.info('\nIn-memory mongo server ', mongoUrl);
 
-    console.info('Staring local server...');
-    const child = spawn('npm', ['start', process.env.PORT || 8888], {
-      cwd: path.resolve(__dirname, '../'),
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+      console.info('Staring local server...');
+      const child = spawn('npm', ['start', process.env.PORT || 8888], {
+        cwd: path.resolve(__dirname, '../'),
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
 
-    Object.assign(__e2e, { childProcessPid: child.pid });
+      Object.assign(__e2e, { childProcessPid: child.pid });
 
     // child.stdout.on('data', (chunk) => {
     //   console.info(`\x1b[34m${chunk.toString()}\x1b[0m`);
     // });
 
-    child.stderr.on('data', (chunk) => {
-      const str = chunk.toString();
-      if (/DeprecationWarning/.test(str)) {
-        return;
-      }
-      console.error('child::stderr', str);
-    });
-
-    process.on('uncaughtException', (err) => {
-      console.error('UncaughtException!');
-      console.error(err);
-      kill(child.pid, 'SIGKILL', () => process.exit(1));
-    });
-
-    waitForServerToBeReady()
-      .then(checkAdminCredentials)
-      .then(createTestUser)
-      .then(resolve)
-      .catch((err) => {
-        kill(child.pid, 'SIGKILL', () => reject(err));
+      child.stderr.on('data', (chunk) => {
+        const str = chunk.toString();
+        if (/DeprecationWarning/.test(str)) {
+          return;
+        }
+        console.error('child::stderr', str);
       });
-    });
+
+      process.on('uncaughtException', (err) => {
+        console.error('UncaughtException!');
+        console.error(err);
+        kill(child.pid, 'SIGKILL', () => process.exit(1));
+      });
+
+      waitForServerToBeReady()
+        .then(checkAdminCredentials)
+        .then(createTestUser)
+        .then(resolve)
+        .catch((err) => {
+          kill(child.pid, 'SIGKILL', () => reject(err));
+        });
+      });
   });
 
 // Export globals - ugly... :-(

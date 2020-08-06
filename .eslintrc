@@ -1,7 +1,9 @@
 {
   "extends": "airbnb-base",
+  "plugins": ["jasmine"],
   "env": {
-    "node": true
+    "node": true,
+    "jasmine": true
   },
   "parserOptions": {
     "ecmaVersion": 2018

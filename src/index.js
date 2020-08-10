@@ -8,6 +8,8 @@ const routes = require('./routes');
 const pkg = require('../package.json');
 
 const { port, dbUrl, secret } = config;
+
+// conexion a la base datos
 mongoose
   .connect(dbUrl, {
     useNewUrlParser: true,

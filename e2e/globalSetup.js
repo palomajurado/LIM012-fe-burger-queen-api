@@ -2,7 +2,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const nodeFetch = require('node-fetch');
 const kill = require('tree-kill');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+//const { MongoMemoryServer } = require('mongodb-memory-server');
 const config = require('../src/config');
 const port = process.env.PORT || 8888;
 const baseUrl = process.env.REMOTE_URL || `http://127.0.0.1:${port}`;
@@ -16,13 +16,13 @@ const __e2e = {
     email: config.adminEmail,
     password: config.adminPassword,
   },
-  adminToken:null,
+  adminToken: null,
   testUserCredentials: {
     email: 'test@test.test',
     password: '123456',
   },
-  testUserToken:null,
-  childProcessPid:null,
+  testUserToken: null,
+  childProcessPid: null,
   // in `testObjects` we keep track of objects created during the test run so
   // that we can clean up before exiting.
   // For example: ['users/foo@bar.baz', 'products/xxx', 'orders/yyy']
@@ -138,9 +138,9 @@ module.exports = () =>
 
       Object.assign(__e2e, { childProcessPid: child.pid });
 
-    // child.stdout.on('data', (chunk) => {
-    //   console.info(`\x1b[34m${chunk.toString()}\x1b[0m`);
-    // });
+      // child.stdout.on('data', (chunk) => {
+      //   console.info(`\x1b[34m${chunk.toString()}\x1b[0m`);
+      // });
 
       child.stderr.on('data', (chunk) => {
         const str = chunk.toString();
@@ -163,7 +163,7 @@ module.exports = () =>
         .catch((err) => {
           kill(child.pid, 'SIGKILL', () => reject(err));
         });
-      });
+    });
   });
 
 // Export globals - ugly... :-(

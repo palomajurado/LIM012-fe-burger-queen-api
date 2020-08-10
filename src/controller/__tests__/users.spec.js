@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
-<<<<<<< HEAD
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
 const {
-  getUsers, getUserUid, postUser, putUser, deleteUser,
+  getUsers, getOneUser, createUser, updateUser, deleteUser,
 } = require('../users.controller');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
@@ -107,25 +106,6 @@ describe('GET/ users', () => {
   };
 
   const next = jest.fn((json) => json);
-
-  it('Debería retornar el numero de usuarios creados', async () => {
-    const userSend2 = await postUser(requestOfPostUsers2, res, next);
-    const userSend = await postUser(requestOfPostUsers, res, next);
-    responseOfGetUsers.push(userSend2, userSend);
-    const users = await getUsers(requestOfGetUsers, res, next);
-    expect(users).toHaveLength(responseOfGetUsers.length);
-    expect(res.send.mock.calls[2].length).toBe(1);
-  });
 });
 
 // estos tenemos que desarrollarlos nosotras
-=======
-/* eslint-disable max-len */
-const {
-  createUser,
-  getOneUser,
-  getUsers,
-  deleteUser,
-  updateUser,
-} = require('../users.controller');
->>>>>>> a190edc24dd261f987c07f4b66d61e7abe48500a

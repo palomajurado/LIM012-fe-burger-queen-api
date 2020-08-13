@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Schema, model } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -5,17 +6,20 @@ const orderSchema = new Schema(
   {
     userId: {
       type: String,
-      required: true,
+      // required: true,
     },
     client: {
       type: String,
-      required: true,
+      // required: true,
     },
     products: [
       {
         _id: false,
         qty: Number,
-        product: { type: String, ref: 'Product' },
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+        },
       },
     ],
     status: {

@@ -18,42 +18,40 @@ module.exports = {
         responsePaginated.totalPages,
       ),
     );
-    if (!responsePaginated) {
-      next(404);
-    }
-    res.json({ products: responsePaginated.docs });
+    if (!responsePaginated) next(404);
+    res.json(responsePaginated.docs);
   },
   getOneProduct: async (req, res, next) => {
-    const productFound = await Product.findById(req.params.productId);
-    if (!productFound) {
-      return next(404);
+    try {
+      const productFound = await Product.findById(req.params.productId);
+      if (!productFound) next(404);
+      res.json(productFound);
+    } catch (error) {
+      next(404);
     }
-    res.json({ product: productFound });
   },
   createProduct: async (req, res, next) => {
+    const product = req.body;
     try {
-      // cuando no se indica nombre o precio del producto a crear
-      if (!req.body.name || !req.body.price) next(400);
+      if (!product.name || !product.price) next(400);
       const newProduct = await Product.create(req.body);
-      res.json({ product: newProduct });
+      res.json(newProduct);
     } catch (error) {
-      // error cuando ya existe un producto con el mismo nombre
       next(404);
     }
   },
   updateProduct: async (req, res, next) => {
+    const product = req.body;
     try {
-      // cuando no se indican propiedades a  modificar
-      if (Object.keys(req.body).length === 0) next(400);
+      if (Object.keys(product).length === 0 || typeof (product.price) !== 'number') next(400);
 
       const productUpdated = await Product.findByIdAndUpdate(
         req.params.productId,
         req.body,
         { new: true },
       );
-      res.json({ product: productUpdated });
+      res.json(productUpdated);
     } catch (error) {
-      // cuando el producto a actualizar no existe
       next(404);
     }
   },
@@ -62,9 +60,8 @@ module.exports = {
       const deletedProduct = await Product.findByIdAndDelete(
         req.params.productId,
       );
-      res.json({ product: deletedProduct });
+      res.json(deletedProduct);
     } catch (error) {
-      // el producto a eliminar no existe
       next(404);
     }
   },

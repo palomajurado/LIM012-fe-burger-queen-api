@@ -6,8 +6,8 @@ const productSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true,
-      lowercase: true,
+      // unique: true,
+      // lowercase: true,
       required: true,
     },
     price: {
@@ -22,7 +22,7 @@ const productSchema = mongoose.Schema(
     type: {
       type: String,
       required: false,
-      default: 'Burgers',
+      // default: 'Burgers',
     },
     dateEntry: {
       type: Date,

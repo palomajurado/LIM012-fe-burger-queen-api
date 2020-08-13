@@ -17,13 +17,13 @@ const __e2e = {
     email: config.adminEmail,
     password: config.adminPassword,
   },
-  adminToken:null,
+  adminToken: null,
   testUserCredentials: {
     email: 'test@test.test',
     password: '123456',
   },
-  testUserToken:null,
-  childProcessPid:null,
+  testUserToken: null,
+  childProcessPid: null,
   // in `testObjects` we keep track of objects created during the test run so
   // that we can clean up before exiting.
   // For example: ['users/foo@bar.baz', 'products/xxx', 'orders/yyy']
@@ -31,8 +31,8 @@ const __e2e = {
 };
 
 const fetch = (url, opts = {}) => {
-  // console.log(baseUrl, url);
-  return nodeFetch(`${baseUrl}${url}`, {
+  // console.log('fetch', url, opts);
+    return nodeFetch(`${baseUrl}${url}`, {
     ...opts,
     headers: {
       'content-type': 'application/json',
@@ -41,8 +41,8 @@ const fetch = (url, opts = {}) => {
     ...(opts.body && typeof opts.body !== 'string'
       ? { body: JSON.stringify(opts.body) }
       : {}),
-  });
-}
+    });
+};
 
 const fetchWithAuth = (token) => (url, opts = {}) => fetch(url, {
   ...opts,
@@ -58,10 +58,10 @@ const fetchAsTestUser = (url, opts) => fetchWithAuth(__e2e.testUserToken)(url, o
 const createTestUser = () => fetchAsAdmin('/users', {
   method: 'POST',
   body: __e2e.testUserCredentials,
-})
+  })
   .then((resp) => {
-    // console.log(__e2e.testUserCredentials);
-    // resp.json().then((result) => console.log(result));
+    // console.log(resp.headers, resp.body);
+    console.log(__e2e.testUserCredentials);
     if (resp.status !== 200) {
       throw new Error('Could not create test user');
     }
@@ -73,7 +73,8 @@ const createTestUser = () => fetchAsAdmin('/users', {
     }
     return resp.json();
   })
-  .then(({ token }) => Object.assign(__e2e, { testUserToken: token }));
+  .then(({ token }) => Object.assign(__e2e, { testUserToken: token })
+);
 
 const checkAdminCredentials = () => fetch('/auth', {
     method: 'POST',
@@ -148,13 +149,14 @@ module.exports = () => new Promise((resolve, reject) => {
       });
   });
 
-  // Export globals - ugly... :-(
-  global.__e2e = __e2e;
-
-  // Export stuff to be used in tests!
-  process.baseUrl = baseUrl;
-  process.fetch = fetch;
-  process.fetchWithAuth = fetchWithAuth;
-  process.fetchAsAdmin = fetchAsAdmin;
-  process.fetchAsTestUser = fetchAsTestUser;
 });
+
+// Export globals - ugly... :-(
+global.__e2e = __e2e;
+
+// Export stuff to be used in tests!
+process.baseUrl = baseUrl;
+process.fetch = fetch;
+process.fetchWithAuth = fetchWithAuth;
+process.fetchAsAdmin = fetchAsAdmin;
+process.fetchAsTestUser = fetchAsTestUser;

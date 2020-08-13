@@ -8,15 +8,16 @@ const routes = require('./routes');
 const pkg = require('../package.json');
 
 const { port, dbUrl, secret } = config;
+const app = express();
+
+// console.log(dbUrl);
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 })
-  .then((db) => console.log(db.connection.host))
+  .then((db) => console.log('db connected!', db.connection.host))
   .catch((err) => console.error(err));
-
-const app = express();
 
 // TODO: Conexión a la BD en mogodb
 

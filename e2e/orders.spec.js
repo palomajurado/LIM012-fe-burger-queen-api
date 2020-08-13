@@ -41,7 +41,7 @@ describe('POST /orders', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5, client: 'client' }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5}], client: 'client' , userId: user._id },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -278,7 +278,7 @@ describe('PUT /orders/:orderId', () => {
   it('should fail with 404 when not found', () => (
     fetchAsAdmin('/orders/xxx', {
       method: 'PUT',
-      body: { state: 'canceled' },
+      body: { status: 'canceled' },
     })
       .then((resp) => expect(resp.status).toBe(404))
   ));

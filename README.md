@@ -3,25 +3,22 @@
 <p align="center">
   <img src="https://storage.googleapis.com/md-links/ttle.png">
 </p>
----
 
-## CLI  📦
+## CLI 📦
 
-- **Install the _CLI_ :**
-
+```sh
+# Arranca la aplicación el puerto 8888 usando npm
+npm start 8888
 ```
 
-```
-
 ---
 
-## JavaScript  💻
-
-
+## JavaScript 💻
 
 ### 🔗 Documentation
 
-- **_**
+- **\_**
+
 ---
 
 ### 🔗 Dependencies

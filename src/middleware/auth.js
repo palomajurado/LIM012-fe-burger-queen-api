@@ -16,7 +16,7 @@ module.exports = (secret) => (req, res, next) => {
 
   jwt.verify(token, secret, async (err, decodedToken) => {
     if (err) {
-      console.log('este es el error');
+      // console.log('este es el error');
       return next(403);
     }
 
@@ -24,7 +24,7 @@ module.exports = (secret) => (req, res, next) => {
     const user = await User.findById(decodedToken.uid);
     // if (!user) return res.status(404).send('No user found');
     if (!user) {
-      console.log('user no encontrado');
+      // console.log('user no encontrado');
       return next(403);
     }
     req.user = user;

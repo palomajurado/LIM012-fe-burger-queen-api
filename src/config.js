@@ -1,5 +1,3 @@
-// require('dotenv').config();
-
 exports.port = process.argv[2] || process.env.PORT || 8080;
 exports.dbUrl = process.env.MONGO_URL || process.env.DB_URL || 'mongodb://localhost:27017/burguer-queen-test';
 exports.secret = process.env.JWT_SECRET || 'esta-es-la-api-burger-queen';

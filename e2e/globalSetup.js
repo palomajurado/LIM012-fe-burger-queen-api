@@ -31,7 +31,6 @@ const __e2e = {
 };
 
 const fetch = (url, opts = {}) => {
-  // console.log('fetch', url, opts);
     return nodeFetch(`${baseUrl}${url}`, {
     ...opts,
     headers: {
@@ -60,8 +59,6 @@ const createTestUser = () => fetchAsAdmin('/users', {
   body: __e2e.testUserCredentials,
   })
   .then((resp) => {
-    // console.log(resp.headers, resp.body);
-    console.log(__e2e.testUserCredentials);
     if (resp.status !== 200) {
       throw new Error('Could not create test user');
     }

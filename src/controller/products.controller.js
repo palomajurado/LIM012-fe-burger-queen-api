@@ -18,41 +18,41 @@ module.exports = {
         responsePaginated.totalPages,
       ),
     );
-    if (!responsePaginated) next(404);
-    res.json(responsePaginated.docs);
+    // if (!responsePaginated) return next(404);
+    return res.json(responsePaginated.docs);
   },
   getOneProduct: async (req, res, next) => {
     try {
       const productFound = await Product.findById(req.params.productId);
-      if (!productFound) next(404);
-      res.json(productFound);
+      if (!productFound) return next(404);
+      return res.json(productFound);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
   createProduct: async (req, res, next) => {
     const product = req.body;
     try {
-      if (!product.name || !product.price) next(400);
+      if (!product.name || !product.price) return next(400);
       const newProduct = await Product.create(req.body);
-      res.json(newProduct);
+      return res.json(newProduct);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
   updateProduct: async (req, res, next) => {
     const product = req.body;
     try {
-      if (Object.keys(product).length === 0 || typeof (product.price) !== 'number') next(400);
+      if (Object.keys(product).length === 0 || typeof (product.price) !== 'number') return next(400);
 
       const productUpdated = await Product.findByIdAndUpdate(
         req.params.productId,
         req.body,
         { new: true },
       );
-      res.json(productUpdated);
+      return res.json(productUpdated);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
   deleteProduct: async (req, res, next) => {
@@ -60,9 +60,9 @@ module.exports = {
       const deletedProduct = await Product.findByIdAndDelete(
         req.params.productId,
       );
-      res.json(deletedProduct);
+      return res.json(deletedProduct);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
 };

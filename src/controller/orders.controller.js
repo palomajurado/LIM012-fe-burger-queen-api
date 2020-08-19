@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-const mongodb = require('mongodb');
+// const mongodb = require('mongodb');
 const Order = require('../models/order.model');
-const Product = require('../models/product.model');
+// const Product = require('../models/product.model');
 const { getPagination } = require('../utils/utils');
 
 module.exports = {
@@ -23,24 +23,23 @@ module.exports = {
       ),
     );
     if (!responsePaginated) {
-      next(401);
+      return next(401);
     }
-    // res.json({ orders: responsePaginated.docs });
-    res.json(responsePaginated.docs);
+    return res.json(responsePaginated.docs);
   },
   getOneOrder: async (req, res, next) => {
     try {
       const orderFound = await Order.findById(req.params.orderId).populate(
         'products.product',
       );
-      res.json(orderFound);
+      return res.json(orderFound);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
   createOrder: async (req, res, next) => {
     const order = req.body;
-    if (!order.products || order.products.length === 0) next(400);
+    if (!order.products || order.products.length === 0) return next(400);
     const newOrder = new Order({
       ...req.body,
       products: req.body.products.map((product) => ({
@@ -49,36 +48,31 @@ module.exports = {
       })),
     });
     const newOrderSaved = await newOrder.save();
-    console.log(newOrderSaved);
 
     const populatedOrder = await newOrderSaved
       .populate('products.product')
       .execPopulate();
-    // console.log(populatedOrder);
-    res.json(populatedOrder);
+    return res.json(populatedOrder);
   },
   updateOrder: async (req, res, next) => {
     const order = req.body;
     try {
-      if (!order.userId && !order.client && !order.products && !order.status) {
-        console.log(order.userId, order.client, order.products, order.status);
-        console.log('error 1');
-        next(400);
-      }
+      if (!order.userId && !order.client && !order.products && !order.status) return next(400);
       // CHEQUEAR RESTRICCIONES EN ESTA LINEA
       const statusOrder = ['pending', 'canceled', 'delivering', 'delivered', 'preparing'];
-      if (order.status && !statusOrder.includes(order.status)) {
-        console.log('error 2');
-        next(400);
+      if (order.status && !statusOrder.includes(order.status)) return next(400);
+
+      if (order.status === 'delivered') {
+        order.dateProcessed = Date.now();
       }
 
       const orderUpdated = await Order.findByIdAndUpdate(
         req.params.orderId,
-        req.body,
+        order,
         { new: true },
       ).lean();
 
-      res.json({
+      return res.json({
         ...orderUpdated,
         products: orderUpdated.products.map((product) => ({
           productId: product.product,
@@ -86,18 +80,25 @@ module.exports = {
         })),
       });
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
   deleteOrder: async (req, res, next) => {
+    const order = req.body;
+    console.log(order);
     try {
-      const deletedOrder = await Order.findByIdAndDelete(
+      if (order.status === 'delivered') {
+        order.dateProcessed = Date.now();
+      }
+      const deletedOrder = await Order.findByIdAndRemove(
         req.params.orderId,
       ).populate('products.product');
-      // console.log(deletedOrder);
-      res.json(deletedOrder);
+      const statusOrder = ['pending', 'canceled', 'delivering', 'delivered'];
+
+      if (!deletedOrder || !statusOrder.includes(deletedOrder.status)) return next(404);
+      return res.json(deletedOrder);
     } catch (error) {
-      next(404);
+      return next(404);
     }
   },
 };

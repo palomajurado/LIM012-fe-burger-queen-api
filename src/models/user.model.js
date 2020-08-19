@@ -9,13 +9,10 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
       validate: {
-        validator: (v) => /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(
-          v,
-        ),
+        validator: (v) => /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(v),
         message: (props) => `${props.value} is not a valid Email!`,
       },
       unique: true,
-      lowercase: true,
     },
     password: {
       type: String,

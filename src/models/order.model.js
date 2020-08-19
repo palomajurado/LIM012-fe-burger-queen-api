@@ -6,11 +6,9 @@ const orderSchema = new Schema(
   {
     userId: {
       type: String,
-      // required: true,
     },
     client: {
       type: String,
-      // required: true,
     },
     products: [
       {
@@ -33,7 +31,6 @@ const orderSchema = new Schema(
     },
     dateProcessed: {
       type: Date,
-      required: false,
     },
   },
   { versionKey: false },

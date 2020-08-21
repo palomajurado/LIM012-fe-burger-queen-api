@@ -1,25 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const config = require('./config.js');
+const config = require('./config');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('../package.json');
 
 const { port, dbUrl, secret } = config;
-
-// conexion a la base datos
-mongoose
-  .connect(dbUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then((db) => console.log(db.connection.host))
-  .catch((err) => console.error(err));
-
 const app = express();
+
+console.log('aqui la URL de la BD:', dbUrl);
+mongoose.connect(dbUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+})
+  .then((db) => console.log('db connected!', db.connection.host))
+  .catch((err) => console.error(err));
 
 // TODO: Conexión a la BD en mogodb
 

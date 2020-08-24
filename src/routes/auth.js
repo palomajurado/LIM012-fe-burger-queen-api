@@ -21,8 +21,7 @@ module.exports = (app, nextMain) => {
     if (!passwordMatch) return next(401); // no esta autorizado
 
     const token = jwt.sign({ uid: user._id }, secret); // genera un token
-
-    resp.json({ resp: { token } }); // devuelve el token
+    return resp.json({ token }); // devuelve el token
   });
 
   return nextMain();

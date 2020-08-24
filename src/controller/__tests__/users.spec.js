@@ -11,11 +11,12 @@ const {
 } = require('../users.controller');
 
 const { resp, next } = require('./mock-express');
+const { dbUrl } = require('../../config');
 
 // DATA
 const userAddedReq = {
   body: {
-    email: 'test@localhost',
+    email: 'test@localhost.test',
     password: 'changeme',
     roles: {
       admin: false,
@@ -25,15 +26,15 @@ const userAddedReq = {
 
 const failedReq = {
   body: {
-    email: 'error@localhost',
+    email: 'error@localhost.test',
   },
   params: {
-    uid: 'error@localhost',
+    uid: 'error@localhost.test',
   },
 };
 
 const userData = {
-  email: 'admin@localhost',
+  email: 'admin@localhost.test',
   password: '1234567',
   roles: {
     admin: true,
@@ -43,8 +44,9 @@ const userData = {
 describe('Users', () => {
   beforeAll((done) => {
     // conexion a la base datos
+    console.log(`BD is connected to ${dbUrl}`);
     mongoose
-      .connect(process.env.DB_URL, {
+      .connect(dbUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
@@ -57,7 +59,7 @@ describe('Users', () => {
       };
       await createUser(req, resp, next);
       await createUser(
-        { body: { ...userData, email: 'admin2@localhost' } },
+        { body: { ...userData, email: 'admin2@localhost.test' } },
         resp,
         next,
       );
@@ -67,9 +69,9 @@ describe('Users', () => {
 
   it('should add a user to the collection', async () => {
     const result = await createUser(userAddedReq, resp, next);
-    expect(result.user.email).toBe('test@localhost');
-    expect(result.user.password).toBeUndefined();
-    expect(result.user.roles.admin).toBeFalsy();
+    expect(result.email).toBe('test@localhost.test');
+    expect(result.password).toBeUndefined();
+    expect(result.roles.admin).toBeFalsy();
   });
 
   it('should not add a user that already exists with the email', async () => {
@@ -96,7 +98,7 @@ describe('Users', () => {
   it('should not add a user to the collection when the password is less than 6 characters', async () => {
     const req = {
       body: {
-        email: 'localhost@localhost',
+        email: 'localhost@localhost.test',
         password: '123',
       },
     };
@@ -115,28 +117,28 @@ describe('Users', () => {
 
     const result = await getUsers(req, resp, next);
 
-    delete result.users[0]._doc._id;
-    delete result.users[0]._doc.password;
+    delete result[0]._doc._id;
+    delete result[0]._doc.password;
     delete userData.password;
 
-    expect(result.users[0]._doc).toEqual(userData);
+    expect(result[0]._doc).toEqual(userData);
   });
 
-  it('should get user requested with email: admin@localhost', async () => {
+  it('should get user requested with email: admin@localhost.test', async () => {
     const req = {
       params: {
-        uid: 'admin@localhost',
+        uid: 'admin@localhost.test',
       },
     };
     const result = await getOneUser(req, resp, next);
-    delete result.user._id;
-    expect(result.user).toEqual(userData);
+    delete result._id;
+    expect(result).toEqual(userData);
   });
 
-  it('should not get user requested with email: unknown@localhost and return 404', async () => {
+  it('should not get user requested with email: unknown@localhost.test and return 404', async () => {
     const req = {
       params: {
-        uid: 'unknown@localhost',
+        uid: 'unknown@localhost.test',
       },
     };
     const result = await getOneUser(req, resp, next);
@@ -147,13 +149,14 @@ describe('Users', () => {
     delete userAddedReq.body.password;
     const req = {
       body: {
-        email: 'admin@localhost',
+        email: 'admin@localhost.test',
         password: 'wow',
       },
-      params: { uid: 'admin@localhost' },
+      params: { uid: 'admin@localhost.test' },
       headers: {
-        user: userAddedReq.body,
+        authorization: '',
       },
+      user: userAddedReq.body,
     };
     const result = await updateUser(req, resp, next);
     expect(result).toBe(400);
@@ -164,10 +167,11 @@ describe('Users', () => {
       body: {
         email: 'wrongFormatLocalhost',
       },
-      params: { uid: 'test@localhost' },
+      params: { uid: 'test@localhost.test' },
       headers: {
-        user: userAddedReq.body,
+        authorization: '',
       },
+      user: userAddedReq.body,
     };
     const result = await updateUser(req, resp, next);
     expect(result).toBe(400);
@@ -177,17 +181,18 @@ describe('Users', () => {
     const req = {
       body: {
         password: 'changeme',
-        email: 'test@localhost',
+        email: 'test@localhost.test',
         roles: {
           admin: false,
         },
       },
-      params: { uid: 'test@localhost' },
+      params: { uid: 'test@localhost.test' },
       headers: {
-        user: {
-          roles: {
-            admin: false,
-          },
+        authorization: '',
+      },
+      user: {
+        roles: {
+          admin: false,
         },
       },
     };
@@ -195,65 +200,68 @@ describe('Users', () => {
     expect(result).toBe(403);
   });
 
-  it('should not be able to edit when there is not email and password present in the body', async () => {
+  it('should not be able to edit a user when it doesnt exit', async () => {
     const req = {
       body: {},
-      params: { uid: 'test@localhost' },
+      params: { uid: 'test@localhost.test' },
       headers: {
-        user: {},
+        authorization: '',
       },
+      user: {},
     };
     const result = await updateUser(req, resp, next);
-    expect(result).toBe(400);
+    expect(result).toBe(404);
   });
 
   it('should edit the user email', async () => {
     const req = {
       body: {
-        email: 'newtest@localhost',
+        email: 'test@localhost.test',
         password: '1234567',
       },
-      params: { uid: 'admin@localhost' },
+      params: { uid: 'test@localhost.test' },
       headers: {
-        user: userAddedReq.body,
+        authorization: '',
       },
+      user: userAddedReq.body,
     };
     const result = await updateUser(req, resp, next);
-    expect(result.user.email).toBe('newtest@localhost');
+    expect(result.email).toBe('test@localhost.test');
   });
 
   it('should edit the user roles', async () => {
     const req = {
       body: {
-        email: 'newtest@localhost',
+        email: 'newtest@localhost.test',
         password: 'newPassword',
         roles: {
           admin: false,
         },
       },
-      params: { uid: 'newtest@localhost' },
+      params: { uid: 'newtest@localhost.test' },
       headers: {
-        user: {
-          email: 'newtest@localhost',
-          roles: {
-            admin: true,
-          },
+        authorization: '',
+      },
+      user: {
+        email: 'newtest@localhost.test',
+        roles: {
+          admin: true,
         },
       },
     };
+    await createUser(req, resp, next);
     const result = await updateUser(req, resp, next);
-
-    expect(result.user.roles.admin).toBeFalsy();
+    expect(result.roles.admin).toBeFalsy();
   });
 
   it('should delete user requested with email: admin2@localhost', async () => {
     const req = {
-      params: { uid: 'admin2@localhost' },
+      params: { uid: 'admin2@localhost.test' },
     };
     const result = await deleteUser(req, resp, next);
     const userExists = await User.findOne({ email: req.params.uid });
-    delete result.user._id;
-    expect(result.user).toEqual({ ...userData, email: 'admin2@localhost' });
+    delete result._id;
+    expect(result).toEqual({ ...userData, email: 'admin2@localhost.test' });
     expect(userExists).toBeNull();
   });
 
@@ -261,8 +269,8 @@ describe('Users', () => {
     const result1 = await deleteUser(failedReq, resp, next);
     const result2 = await updateUser(
       {
-        body: { email: 'notfound@localhost', password: '1234567' },
-        params: { uid: 'notfound@localhost' },
+        body: { email: 'notfound@localhost.test', password: '1234567' },
+        params: { uid: 'notfound@localhost.test' },
       },
       resp,
       next,

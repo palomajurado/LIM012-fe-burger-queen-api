@@ -11,7 +11,7 @@
     "dev": "nodemon src/index.js --exec babel-node",
     "start": "node src/index.js",
     "pretest": "eslint . --fix",
-    "test:e2e": "jest --verbose --testPathPattern e2e --globalSetup ./e2e/globalSetup --globalTeardown ./e2e/globalTeardown --runInBand",
+    "test:e2e": "jest  --verbose --testPathPattern e2e --globalSetup ./e2e/globalSetup --globalTeardown ./e2e/globalTeardown --runInBand",
     "test:unit": "jest --verbose --testPathIgnorePatterns mock-express e2e",
     "test": "npm run test:e2e && npm run test:unit",
     "lint": "eslint .",
@@ -54,12 +54,6 @@
     "jsdoc-http-plugin": "0.3.1",
     "node-fetch": "2.6.0",
     "nodemon": "2.0.4",
-    "tree-kill": "1.2.1"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "<rootDir>/e2e/globalSetup.js"
-    ]
+    "tree-kill": "^1.2.2"
   }
 }

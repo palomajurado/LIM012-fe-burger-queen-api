@@ -7,17 +7,17 @@ services:
       - '27017:27017'
     logging:
       driver: none
+    networks: 
+      - private
   node:
     image: 'node:10' # https://hub.docker.com/_/node/
+    user: "node"
     container_name: api_web
-    # user: 'node'
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=8080
-      # - DB_URL=mongodb://database/burguer-database
-      - DB_URL=mongodb://database/burguer-queen-test
-      #- DB_URL=mongodb://ec2-18-216-24-209.us-east-2.compute.amazonaws.com
+      - DB_URL=mongodb://db:27017/burguer-queen-test
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:
@@ -25,7 +25,15 @@ services:
     expose:
       - '8080' # nuestra app corre en el puerto 8080
     ports:
-      - '3000:8080' # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
+      - '80:8080' # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
     command: "bash -c 'rm -rf node_modules && npm install && npm run dev'" # reinstalamos las dependencias y levantamos el servidor
     depends_on:
       - db
+    networks: 
+      - public
+      - private
+networks: 
+  public:
+    internal: false
+  private:
+    internal: true

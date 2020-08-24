@@ -16,7 +16,7 @@ module.exports = (app, nextMain) => {
 
     if (!user) return next(404); // no encontrado
 
-    const passwordMatch = await user.comparePassword(password);
+    const passwordMatch = await user.comparePassword(password); // aqui uso acceso de contrasenia el almacenamiento es el password guardado en la base de datos
 
     if (!passwordMatch) return next(401); // no esta autorizado
 

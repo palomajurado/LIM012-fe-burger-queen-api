@@ -11,17 +11,18 @@ module.exports = () => (req, res, next) => {
 
   const [type, token] = authorization.split(' ');
 
+  // si dentro del token esta la palabra bearer continua
   if (type.toLowerCase() !== 'bearer') return next();
 
+  // verifica si el token es un token valido
   jwt.verify(token, config.secret, async (err, decodedToken) => {
     if (err) return next(403);
-    // console.log(decodedToken);
 
-    // TODO: Verificar identidad del usuario usando `decodeToken.uid`
+    // TODO: Verificar identidad del usuario usando `decodeToken.uid` password 0 por que no quiere la contrasenia
     const user = await User.findById(decodedToken.uid, { password: 0 });
     if (!user) return res.status(404).send('No user found');
 
-    // req.user = user;
+    // si existe usuario lo guarda en req.user = user;
     req.headers.user = user;
     next();
   });
@@ -43,6 +44,7 @@ module.exports.requireAdmin = (req, resp, next) => (!module.exports.isAuthentica
     : next());
 
 module.exports.requireAdminOrUser = (req, res, next) => {
+  // si el usuario es autenticado y si es administrador
   if (!module.exports.isAuthenticated(req)) next(401);
   if (
     !module.exports.isAdmin(req)

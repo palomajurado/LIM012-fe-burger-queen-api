@@ -2,12 +2,11 @@ const path = require('path');
 const { spawn } = require('child_process');
 const nodeFetch = require('node-fetch');
 const kill = require('tree-kill');
-//const { MongoMemoryServer } = require('mongodb-memory-server');
+const setup = require('@shelf/jest-mongodb/setup');
 const config = require('../src/config');
+const { set } = require('mongoose');
 const port = process.env.PORT || 8888;
 const baseUrl = process.env.REMOTE_URL || `http://127.0.0.1:${port}`;
-
-// global.__mongoServer__ = mongoServerbMemoryServer;
 
 const __e2e = {
   port,
@@ -123,13 +122,7 @@ module.exports = () =>
     }
 
     // TODO: Configurar DB de tests
-    const mongoServer = new MongoMemoryServer();
-
-    mongoServer.getConnectionString().then((mongoUrl) => {
-      process.env.DB_URL = mongoUrl;
-      console.log('Mongo url is ', process.env.DB_URL);
-      console.info('\nIn-memory mongo server ', mongoUrl);
-
+    setup().then(() => {
       console.info('Staring local server...');
       const child = spawn('npm', ['start', process.env.PORT || 8888], {
         cwd: path.resolve(__dirname, '../'),

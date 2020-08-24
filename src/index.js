@@ -6,6 +6,7 @@ const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('../package.json');
+const cors = require('cors')
 
 const { port, dbUrl, secret } = config;
 
@@ -27,12 +28,14 @@ app.set('config', config);
 app.set('pkg', pkg);
 
 // parse application/x-www-form-urlencoded
+app.use(cors())
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // se convierte a objeto json el req.body y lo podemos manipular en codigo
 app.use(authMiddleware(secret));
 
 // Registrar rutas
+// lee todas las rutas creadas en la carpeta routes y luego ejecuta el app.listen
 routes(app, (err) => {
   if (err) {
     throw err;

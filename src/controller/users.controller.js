@@ -3,7 +3,11 @@ const User = require('../models/user.model');
 const { getPagination } = require('../utils/utils');
 const { uidOrEmail } = require('../utils/utils');
 
+// json formato de intercambio de datos otros xml, yml
+// cors es un concepto para evitar la conexion de cualquier servidor al mio a menos que se lo permita
+
 module.exports = {
+  // se le conoce como un request handler DECIDE QUE HACER CON LA PETICION
   getUsers: async (req, res) => {
     const url = `${req.protocol}://${req.get('host')}${req.path}`;
 
@@ -13,6 +17,7 @@ module.exports = {
       select: '-password',
     };
 
+    // {} esto es para filtrar segun lo que se pida
     const responsePaginated = await User.paginate({}, options);
 
     res.set(
@@ -24,6 +29,7 @@ module.exports = {
         responsePaginated.totalPages,
       ),
     );
+    // al final el res.json se le devuelve al cliente
 
     return res.json({
       users: responsePaginated.docs,

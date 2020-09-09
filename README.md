@@ -31,11 +31,10 @@ npm start 8888
 
 ---
 
-## JavaScript 💻
-
 ### 🔗 Documentation
+- [documentación](https://laboratoria.github.io/burger-queen-api/)
 
-- **\_**
+- Api desplegada con digital ocean en droplet http://165.232.64.218:3000/
 
 ---
 
